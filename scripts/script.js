@@ -3,17 +3,27 @@ const wordDisplay=document.querySelector(".word-display");
 const guessesText=document.querySelector(".guesses-text b");
 const keyboardDiv=document.querySelector(".keyboard");
 const gameModel=document.querySelector(".game-model");
+const playAgainBtn=document.querySelector(".play-again");
 
-let currentWord, correctLetters=[], wrongGuessCount = 0;
+let currentWord, correctLetters, wrongGuessCount;
 const maxGuesses = 6;
+
+const resetGame = () => {
+  correctLetters=[];
+  wrongGuessCount=0; 
+  hangmanImage.src = `images/hangman-${wrongGuessCount}.svg` ;
+  guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`
+  keyboardDiv.querySelectorAll("button").forEach(btn => btn.disabled = false);  
+  wordDisplay.innerHTML = currentWord.split("").map(() => `<li class="letter"></li>`).join("");
+  gameModel.classList.remove("show");
+}
 
 const getRandomWord = () => {
   //Getting a random word from the word list
   const{word,hint}=wordList[Math.floor(Math.random() * wordList.length)];
   currentWord = word;
-  console.log(word);
   document.querySelector(".hint-text").innerText = hint;
-  wordDisplay.innerHTML = word.split("").map(() => `<li class="letter"></li>`).join("");
+  resetGame();
 }
 
 const gameOver = (isVictory) => {
@@ -60,3 +70,4 @@ for(let i=97;i<122;i++){
 }
 
 getRandomWord();
+playAgainBtn.addEventListener("click",getRandomWord);
