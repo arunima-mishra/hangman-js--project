@@ -1,3 +1,4 @@
+const hangmanImage=document.querySelector(".hangman-box img");
 const wordDisplay=document.querySelector(".word-display");
 const guessesText=document.querySelector(".guesses-text b");
 const keyboardDiv=document.querySelector(".keyboard");
@@ -15,7 +16,9 @@ const getRandomWord = () => {
 }
 
 const initGame = (button, clickedLetter) => {
+  //check if clicked letter exists
   if(currentWord.includes(clickedLetter)){
+    //display letters
     [...currentWord].forEach((letter, index) => {
       if(letter == clickedLetter){
         wordDisplay.querySelectorAll("li")[index].innerText=letter;
@@ -24,11 +27,14 @@ const initGame = (button, clickedLetter) => {
     });
   }
   else{
+    // adding parts of hangman via image by updating wrongGuessCount
     wrongGuessCount++;
+    hangmanImage.src = `images/hangman-${wrongGuessCount}.svg` ;
   }
 guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`
 }
 
+//keyboard created
 for(let i=97;i<122;i++){
   const button =document.createElement("button");
   button.innerText=String.fromCharCode(i);
