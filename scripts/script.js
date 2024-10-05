@@ -31,7 +31,8 @@ const initGame = (button, clickedLetter) => {
     wrongGuessCount++;
     hangmanImage.src = `images/hangman-${wrongGuessCount}.svg` ;
   }
-guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`
+  button.disabled=true;
+  guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`
 }
 
 //keyboard created
