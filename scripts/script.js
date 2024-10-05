@@ -2,8 +2,9 @@ const hangmanImage=document.querySelector(".hangman-box img");
 const wordDisplay=document.querySelector(".word-display");
 const guessesText=document.querySelector(".guesses-text b");
 const keyboardDiv=document.querySelector(".keyboard");
+const gameModel=document.querySelector(".game-model");
 
-let currentWord, wrongGuessCount = 0;
+let currentWord, correctLetters=[], wrongGuessCount = 0;
 const maxGuesses = 6;
 
 const getRandomWord = () => {
@@ -15,12 +16,23 @@ const getRandomWord = () => {
   wordDisplay.innerHTML = word.split("").map(() => `<li class="letter"></li>`).join("");
 }
 
+const gameOver = (isVictory) => {
+  setTimeout(() => {
+    const modelText = isVictory ? `You found the word:` : `The correct word was:`;
+    gameModel.querySelector("img").src = `images/${isVictory ? 'victory' : 'lost'}.gif`;
+    gameModel.querySelector("h4").innerText = `${isVictory ? 'Congrats!' : 'Game Over!'}`;
+    gameModel.querySelector("p").innerHTML = `${modelText} <b>${currentWord}</b>`;
+    gameModel.classList.add("show");
+  }, 300);
+}
+
 const initGame = (button, clickedLetter) => {
   //check if clicked letter exists
   if(currentWord.includes(clickedLetter)){
     //display letters
     [...currentWord].forEach((letter, index) => {
       if(letter == clickedLetter){
+        correctLetters.push(letter);
         wordDisplay.querySelectorAll("li")[index].innerText=letter;
         wordDisplay.querySelectorAll("li")[index].classList.add("guessed");
       }
@@ -33,6 +45,10 @@ const initGame = (button, clickedLetter) => {
   }
   button.disabled=true;
   guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`
+
+  //gameover function calls
+  if(wrongGuessCount ===maxGuesses) return gameOver(false);
+  if(correctLetters.length ===currentWord.length) return gameOver(true);
 }
 
 //keyboard created
